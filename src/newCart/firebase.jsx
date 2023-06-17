@@ -76,8 +76,8 @@ export default function FirebaseForm() {
   return (
     <>
       <h1>Firebase Model</h1>
-      <div ref={userName}>  Please login </div>
-      <div ref={userEmail}> Please login  </div>
+      <div ref={userName}>  Name : Please login </div>
+      <div ref={userEmail}> Email : Please login  </div>
       <ToastContainer />
       <form onSubmit={handleSubmit} action="">
         <br />
