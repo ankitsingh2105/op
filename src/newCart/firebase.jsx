@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import "./index.css"
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,11 +16,11 @@ const firebaseConfig = {
 
 
 export default function FirebaseForm() {
-  const userName = useRef(null);
-  const userEmail = useRef(null);
+  const [userName, setName] = useState("Please login");
+  const [userEmail, setEmail] = useState("Please login")
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -31,8 +31,6 @@ export default function FirebaseForm() {
       await updateProfile(auth.currentUser, {
         displayName: name
       });
-      userEmail.current.innerHTML = `Email : ${email}`;
-      userName.current.innerHTML = `Name : ${name}`;
       console.log("this is the result -> ", result);
       toast.success("Successfully Signed Up", { autoClose: 1500 });
     } catch (err) {
@@ -66,8 +64,8 @@ export default function FirebaseForm() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("user email-> ", user.email, " \nuser name-> ", user.displayName)
-      userEmail.current.innerHTML = `Email : ${user.email}`;
-      userName.current.innerHTML = `Name : ${user.displayName}`;
+      setEmail(user.email);
+      setName(user.displayName);
     } else {
       console.log("user is out ");
     }
@@ -75,8 +73,8 @@ export default function FirebaseForm() {
   return (
     <>
       <h1>Firebase Model</h1>
-      <div ref={userName}>  Name : Please login </div>
-      <div ref={userEmail}> Email : Please login  </div>
+      <div>  Name : {userName} </div>
+      <div> Email : {userEmail}  </div>
       <ToastContainer />
       <form onSubmit={handleSubmit} action="">
         <br />
