@@ -31,6 +31,8 @@ export default function FirebaseForm() {
       await updateProfile(auth.currentUser, {
         displayName: name
       });
+      userEmail.current.innerHTML = `Email : ${email}`;
+      userName.current.innerHTML = `Name : ${name}`;
       console.log("this is the result -> ", result);
       toast.success("Successfully Signed Up", { autoClose: 1500 });
     } catch (err) {
@@ -64,8 +66,8 @@ export default function FirebaseForm() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("user email-> ", user.email, " \nuser name-> ", user.displayName)
-      userEmail.current.innerHTML = `Email : ${user.email}`;
-      userName.current.innerHTML = `Name : ${user.displayName}`;
+      // userEmail.current.innerHTML = `Email : ${user.email}`;
+      // userName.current.innerHTML = `Name : ${user.displayName}`;
     } else {
       console.log("user is out ");
     }
