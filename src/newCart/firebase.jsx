@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useDeferredValue, useEffect, useRef, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import "./index.css"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, GoogleAuthProvider ,signInWithPopup, signOut } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCFVxCioGK8yRArkJOMGsBQOSo95xdwyeA",
@@ -61,15 +61,39 @@ export default function FirebaseForm() {
       window.location.reload();
     }, 1800);
   }
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("user email-> ", user.email, " \nuser name-> ", user.displayName)
-      setEmail(user.email);
-      setName(user.displayName);
-    } else {
-      console.log("user is out ");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("user email-> ", user.email, " \nuser name-> ", user.displayName);
+        setEmail(user.email);
+        setName(user.displayName);
+      } else {
+        console.log("user is out ");
+      }
+    });
+  
+    return () => unsubscribe();
+  },[auth, userEmail]);
+
+
+  // TODO : google sign ups
+
+  
+  
+  // todo: google signs 
+  
+  const handleGoogleLogin = async() =>{
+    const provider = new GoogleAuthProvider();
+    try{
+      const signgoogle = await signInWithPopup(auth, provider)
+      console.log("we are inside the login google -> " , signgoogle);
     }
-  });
+    catch(err){
+      console.error(err);
+    }
+  }
+  
   return (
     <>
       <h1>Firebase Model</h1>
@@ -100,6 +124,8 @@ export default function FirebaseForm() {
       <button onClick={handleLogout} >
         Logout
       </button>
+      <br />
+      <button onClick={handleGoogleLogin}>Login with google</button>
     </>
   )
 }
