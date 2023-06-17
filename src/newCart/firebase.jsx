@@ -66,8 +66,8 @@ export default function FirebaseForm() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("user email-> ", user.email, " \nuser name-> ", user.displayName)
-      // userEmail.current.innerHTML = `Email : ${user.email}`;
-      // userName.current.innerHTML = `Name : ${user.displayName}`;
+      userEmail.current.innerHTML = `Email : ${user.email}`;
+      userName.current.innerHTML = `Name : ${user.displayName}`;
     } else {
       console.log("user is out ");
     }
