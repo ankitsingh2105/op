@@ -39,7 +39,7 @@ export default function FirebaseForm() {
   }
   
   const handleLogin = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("this is the login form ");
     const name = e.target.name.value;
     const email = e.target.email.value;
@@ -87,7 +87,7 @@ export default function FirebaseForm() {
         <br />
         <input type="password" name="password" placeholder='password' />
         <br />
-        <button type="submit">Submit</button>
+        <button type="submit">Sign up</button>
         <br />
       </form>
       <form onSubmit={handleLogin} action="">
