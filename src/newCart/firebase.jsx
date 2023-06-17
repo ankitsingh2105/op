@@ -41,12 +41,12 @@ export default function FirebaseForm() {
   const handleLogin = async (e) => {
     // e.preventDefault();
     console.log("this is the login form ");
-    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     try {
       const login = await signInWithEmailAndPassword(auth, email, password);
       console.log("this is the login ", login);
+      toast.success("Successfull login bawa!!", {autoClose : 1500})
     }
     catch (error) {
       toast.error("Invalid Login credentials" , {autoClose: 1500})
