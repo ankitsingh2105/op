@@ -1,8 +1,8 @@
 import "./index.css"
 import { useState , useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { getFirestore, doc , setDoc, addDoc, collection } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged , GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, doc , setDoc } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,14 +22,6 @@ export default function FirebaseForm() {
   const db = getFirestore(app);
   const [userName, setName] = useState("Please login");
   const [userEmail, setEmail] = useState("Please login")
-
-  const handleLogout = async (e) => {
-    await signOut(auth);
-    toast.success("Sign out is successfull", { autoClose: 1500 });
-    setTimeout(() => {
-      window.location.reload();
-    }, 1800);
-  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -84,14 +76,10 @@ export default function FirebaseForm() {
 
   return (
     <>
-      <h1>Firebase Model</h1>
+      <h1></h1>
       <div>  Name : {userName} </div>
       <div> Email : {userEmail}  </div>
       <ToastContainer />
-      <br />
-      <button onClick={handleLogout} >
-        Logout
-      </button>
       <br />
       <button onClick={handleGoogleLogin}>Login with google</button>
     </>
