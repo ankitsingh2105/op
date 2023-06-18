@@ -1,9 +1,10 @@
-import React, { useDeferredValue, useEffect, useRef, useState } from 'react';
-import { initializeApp } from "firebase/app";
 import "./index.css"
+import { useState , useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getFirestore, doc , setDoc, addDoc, collection } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, GoogleAuthProvider ,signInWithPopup, signOut } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCFVxCioGK8yRArkJOMGsBQOSo95xdwyeA",
@@ -16,28 +17,38 @@ const firebaseConfig = {
 
 
 export default function FirebaseForm() {
-  const [userName, setName] = useState("Please login");
-  const [userEmail, setEmail] = useState("Please login")
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(auth.currentUser, {
-        displayName: name
-      });
-      console.log("this is the result -> ", result);
+  const db = getFirestore(app);
+  const [userName, setName] = useState("Please login");
+  const [userEmail, setEmail] = useState("Please login")
+
+  // ...
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const name = e.target.name.value;
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(auth.currentUser, {
+      displayName: name
+    });
+    if (auth.currentUser) {
+      console.log("this is the user UID -> ", result.user);
       toast.success("Successfully Signed Up", { autoClose: 1500 });
-    } catch (err) {
-      console.log(err);
-      toast.error(err.message, { autoClose: 1500 });
+    } else {
+      throw new Error("User authentication failed.");
     }
+  } catch (err) {
+    console.log(err);
+    toast.error(err.message, { autoClose: 1500 });
   }
+};
+
+// ...
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,28 +83,51 @@ export default function FirebaseForm() {
         console.log("user is out ");
       }
     });
-  
+
     return () => unsubscribe();
-  },[auth, userEmail]);
+  }, [auth, userEmail]);
 
 
   // TODO : google sign ups
 
-  
-  
-  // todo: google signs 
-  
-  const handleGoogleLogin = async() =>{
+
+
+  // TODO: google signs 
+
+  const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
-    try{
+    try {
       const signgoogle = await signInWithPopup(auth, provider)
-      console.log("we are inside the login google -> " , signgoogle);
+      console.log("we are inside the login google -> ", signgoogle.user.uid);
+      console.log("we are inside the login google -> ", signgoogle.user.displayName);
+      createUserCollection(signgoogle.user , signgoogle.user.displayName);
     }
-    catch(err){
+    catch (err) {
       console.error(err);
     }
   }
-  
+
+  // todo : creating user collection -> 
+  // * ---------------------- *
+
+
+  const createUserCollection = async (user  , name) => {
+    try {
+      const docRef = doc(db, 'newUsers21' , user.uid);
+      await setDoc(docRef , {
+        uid: user.uid,
+        email: user.email,
+        name: name
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } 
+    catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
+
+
   return (
     <>
       <h1>Firebase Model</h1>
