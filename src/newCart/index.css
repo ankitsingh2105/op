@@ -2,3 +2,24 @@ body{
     background-color: black;
     color: white;
 }
+li{
+    list-style: none;
+    color: white;
+    text-decoration: underline;
+    margin: 0px 10px;
+}
+ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;   
+}
+li:hover , button:hover{
+    cursor: pointer;
+}

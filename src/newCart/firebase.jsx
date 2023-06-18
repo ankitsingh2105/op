@@ -23,48 +23,6 @@ export default function FirebaseForm() {
   const [userName, setName] = useState("Please login");
   const [userEmail, setEmail] = useState("Please login")
 
-  // ...
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const name = e.target.name.value;
-  const email = e.target.email.value;
-  const password = e.target.password.value;
-  try {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(auth.currentUser, {
-      displayName: name
-    });
-    if (auth.currentUser) {
-      console.log("this is the user UID -> ", result.user);
-      toast.success("Successfully Signed Up", { autoClose: 1500 });
-    } else {
-      throw new Error("User authentication failed.");
-    }
-  } catch (err) {
-    console.log(err);
-    toast.error(err.message, { autoClose: 1500 });
-  }
-};
-
-// ...
-
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log("this is the login form ");
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    try {
-      const login = await signInWithEmailAndPassword(auth, email, password);
-      console.log("this is the login ", login);
-      toast.success("Successfull login bawa!!", { autoClose: 1500 })
-    }
-    catch (error) {
-      toast.error("Invalid Login credentials", { autoClose: 1500 })
-    }
-  }
-
   const handleLogout = async (e) => {
     await signOut(auth);
     toast.success("Sign out is successfull", { autoClose: 1500 });
@@ -89,10 +47,6 @@ const handleSubmit = async (e) => {
 
 
   // TODO : google sign ups
-
-
-
-  // TODO: google signs 
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -134,26 +88,6 @@ const handleSubmit = async (e) => {
       <div>  Name : {userName} </div>
       <div> Email : {userEmail}  </div>
       <ToastContainer />
-      <form onSubmit={handleSubmit} action="">
-        <br />
-        <input type="text" name="name" placeholder='name' />
-        <br />
-        <input type="email" name="email" placeholder='email' />
-        <br />
-        <input type="password" name="password" placeholder='password' />
-        <br />
-        <button type="submit">Sign up</button>
-        <br />
-      </form>
-      <form onSubmit={handleLogin} action="">
-        <br />
-        <input type="email" name="email" placeholder='email' />
-        <br />
-        <input type="password" name="password" placeholder='password' />
-        <br />
-        <button type="submit">Login</button>
-        <br />
-      </form>
       <br />
       <button onClick={handleLogout} >
         Logout
