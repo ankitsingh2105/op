@@ -9,6 +9,7 @@ li{
     margin: 0px 10px;
 }
 ul{
+    padding: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,4 +23,7 @@ div{
 }
 li:hover , button:hover{
     cursor: pointer;
+}
+h1{
+    text-align: center;
 }

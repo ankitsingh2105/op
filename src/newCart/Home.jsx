@@ -22,7 +22,7 @@ export default function Home() {
     });
     return (
         <div>
-            <h1>Welcome {name} 👋</h1>
+            <h1>Welcome <br />{name} 👋</h1>
             {/* <h1>{name}</h1> */}
         </div>
     )
