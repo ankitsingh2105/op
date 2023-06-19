@@ -2,30 +2,52 @@ import "./index.css"
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { updateProfile, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import {getFirestore, doc, setDoc } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import firebaseConfig from "./config";
-
+import dummy from "./dummyimageFirebase.png"
 export default function FirebaseForm() {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const [userName, setName] = useState("Please login");
-  const [userEmail, setEmail] = useState("Please login")
+  const [userEmail, setEmail] = useState("Please login");
+  const [loading, setLoading] = useState(true);
+  
+  // todo : creating user collection -> 
+  // * ---------------------- *
+  
+  
+  const createUserCollection = async (user, name) => {
+    try {
+      const docRef = doc(db, 'newUser', user.uid);
+      await setDoc(docRef, {
+        uid: user.uid,
+        email: user.email,
+        name: name,
+      });
+    }
+    catch (e) {
+      toast.error("something went wrong"  ,  {aut})
+    }
+  };
 
   useEffect(() => {
+    setLoading(false);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        createUserCollection(user , user.displayName);
+        console.log("op -> " , user.uid , user.displayName);
         setEmail(user.email);
         setName(user.displayName);
-        console.log("this is user -> "  , user);
-        console.log("this is user name-> "  , user.displayName);
+        console.log("this is user -> ", user.uid);
+        console.log("this is user name-> ", user.displayName);
       }
     });
 
     return () => unsubscribe();
-  }, [auth, userEmail]);
+  }, [auth, userEmail , userName]);
 
 
   // TODO : google sign ups
@@ -41,49 +63,25 @@ export default function FirebaseForm() {
     }
   }
 
-  // todo : creating user collection -> 
-  // * ---------------------- *
-
-
-  const createUserCollection = async (user, name) => {
-    console.log
-    try {
-      const docRef = doc(db, 'newUsers21', user.uid);
-      await setDoc(docRef, {
-        uid: user.uid,
-        email: user.email,
-        name: name,
-        phone: "",
-        gender: ""
-      });
-    }
-    catch (e) {
-      console.error('Error adding document: ', e);
-    }
-  };
 
 
 
   // todo : handeling form submissions
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("this is the email-> ", e.target.email.value)
-    console.log("this is the password-> ", e.target.passwords.value)
-    console.log("this is the first name -> ", e.target.firstName.value)
-    console.log("this is the last name -> ", e.target.lastname.value)
-    console.log("this is the form");
     const fname = e.target.firstName.value;
     const lname = e.target.lastname.value;
     const email = e.target.email.value;
-    const password =e.target.passwords.value;
-    const emailAndPass =await createUserWithEmailAndPassword(auth, email, password)
-    try{
-      console.log("this is emailandpass-> " , emailAndPass);
-      toast.success("this is success" , {autoClose:1500});
-      await updateProfile(auth.currentUser, { displayName: `${fname} ${ lname}` });
+    const password = e.target.passwords.value;
+    const emailAndPass = await createUserWithEmailAndPassword(auth, email, password)
+    try {
+      window.location.reload();
+      console.log("this is emailandpass-> ", emailAndPass);
+      toast.success("this is success", { autoClose: 1500 });
+      await updateProfile(auth.currentUser, { displayName: `${fname} ${lname}`, photoURL : dummy });
     }
-    catch(err){
-      toast.error(emailAndPass.error , {autoClose:1500});
+    catch (err) {
+      toast.error(emailAndPass.error, { autoClose: 1500 });
     }
   }
 
@@ -91,10 +89,15 @@ export default function FirebaseForm() {
   return (
     <>
       <h1>स्वागत है!</h1>
-      <div className="info"> <b>Name</b> : {userName} </div>
-      <div className="info"> <b>Email</b> : {userEmail}  </div>
-      <br />
-
+      {
+        loading ? (<h1 id="spinner2"></h1>) : (
+          <>
+            <div className="info"> <b>Name</b> : {userName} </div>
+            <div className="info"> <b>Email</b> : {userEmail}  </div>
+            <br />
+          </>
+        )
+      }
       <article>
         <br />
         <div>

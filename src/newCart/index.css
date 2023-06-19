@@ -47,6 +47,14 @@ img{
     border-radius: 1000px;
     animation: rotate 1s linear;
 }
+#spinner2{
+    width:30px;
+    height:30px;
+    border-bottom: 2px solid yellow;
+    border-radius: 1000px;
+    animation: rotate 1s linear;
+    margin-top: -.6rem;
+}
 @keyframes rotate{
     0%{
         transform: rotate(0deg);
