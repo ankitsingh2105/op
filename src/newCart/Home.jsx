@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { onAuthStateChanged, getAuth, updateProfile } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { toast } from 'react-toastify';
 import firebaseConfig from './config';
@@ -37,8 +36,6 @@ export default function Home() {
                 <div class="info"><b>Email:</b> &nbsp; ${user.email}</div>
                 <br/>
                 <div class="info"><b>Last Login:</b> &nbsp; ${formattedLastLogin}</div>
-                <br/>
-                <br/>
                 <br/>
                 `;
             }
