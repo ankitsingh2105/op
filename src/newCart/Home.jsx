@@ -115,6 +115,7 @@ export default function Home() {
                         </div>
                         <div>
                             <div>
+                                <br />
                                 <input type="file" accept="image/*" onChange={handleImageChanges} />
                             </div>
                             <br />
