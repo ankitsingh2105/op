@@ -107,6 +107,7 @@ export default function Home() {
                     (<h1 id="spinner"></h1>) :
                     (<>
                         <div>
+                            <br />
                             <h1>Welcome <br />
                                 {name}👋</h1>
                             <img src={newDummy} alt="" />
