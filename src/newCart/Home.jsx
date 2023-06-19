@@ -17,6 +17,8 @@ export default function Home() {
     const auth = getAuth(app);
     const storage = getStorage(app);
 
+    console.log("welcome inspector 👋")
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -33,7 +35,7 @@ export default function Home() {
                 <br/>
                 <div class="info"><b>Name:</b> &nbsp; ${user.displayName}</div>
                 <br/>
-                <div class="info"><b>Email:</b> &nbsp; ${user.email}</div>
+                <div class="info"><b>Gmail:</b> &nbsp; ${user.email}</div>
                 <br/>
                 <div class="info"><b>Last Login:</b> &nbsp; ${formattedLastLogin}</div>
                 <br/>
@@ -107,7 +109,7 @@ export default function Home() {
                             <br />
                             <h1>Welcome <br /> {name}👋</h1>
                             <img src={newDummy} alt="" />
-                            <div>Profile Image</div>
+                            <div><b>Picture</b></div>
                             <div id="info" ref={infoCenter}></div>
                         </div>
                         <div>
