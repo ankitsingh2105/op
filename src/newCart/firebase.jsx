@@ -67,7 +67,6 @@ export default function FirebaseForm() {
       <h1>स्वागत है!</h1>
       <div className="info"> <b>Name</b> : {userName} </div>
       <div className="info"> <b>Email</b> : {userEmail}  </div>
-      <ToastContainer />
       <br />
       <button onClick={handleGoogleLogin}>Login with google</button>
     </>
