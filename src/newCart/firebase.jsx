@@ -63,9 +63,9 @@ export default function FirebaseForm() {
 
   return (
     <>
-      <h1></h1>
-      <div>  Name : {userName} </div>
-      <div> Email : {userEmail}  </div>
+      <h1>स्वागत है!</h1>
+      <div className="info"> <b>Name</b> : {userName} </div>
+      <div className="info"> <b>Email</b> : {userEmail}  </div>
       <ToastContainer />
       <br />
       <button onClick={handleGoogleLogin}>Login with google</button>
