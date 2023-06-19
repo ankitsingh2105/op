@@ -7,6 +7,7 @@ import { getDoc, doc, getFirestore, onSnapshot } from 'firebase/firestore';
 import { getStorage, ref ,uploadBytes } from "firebase/storage";
 export default function Home() {
     const [name, setname] = useState("")
+    const [newDummy , setDummy] = useState(dummy);
     const infoCenter = useRef(null);
     // todo : displaying date on the home page
     const app = initializeApp(firebaseConfig);
@@ -16,6 +17,7 @@ export default function Home() {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            setDummy(user.photoURL);
             setname(user.displayName);
                 infoCenter.current.innerHTML =
                     `
@@ -37,9 +39,10 @@ export default function Home() {
 
     const handleImageChanges = (e) => {
         const photo = e.target.files[0];
+        console.log("this is some files -> "  , e.target.files)
         console.log("we are selecting an image:", photo.name);
         const user = auth.currentUser;
-        const storageRef = ref(storage, `images/${user.uid}/${photo.name}`);
+        const storageRef = ref(storage, `images/${user.uid +" - " + user.email}/${photo.name}`);
       
         uploadBytes(storageRef, photo).then(() => {
           console.log('Uploaded a blob or file!');
@@ -54,7 +57,7 @@ export default function Home() {
         const auth = getAuth();
         const user = auth.currentUser;
         if (user) {
-            console.log("current user is  -> ", user.displayName);
+            console.log("current user is  -> ", user);
         }
     }
 
@@ -65,7 +68,7 @@ export default function Home() {
                 <div id="info" ref={infoCenter} ></div>
             </div>
             <div>
-                <img src={dummy} alt="" />
+                <img src={newDummy} alt="" />
                 <br />
                 <div>Profile Image</div>
                 <br />
