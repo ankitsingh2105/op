@@ -3,6 +3,7 @@ body{
     color: white; */
     border: 1px solid black;
     height:44rem;
+    transition: 0.2s all;
 }
 li{
     list-style: none;
@@ -62,13 +63,14 @@ nav{
     font-weight: bolder;
 }
 button{
-    background-color: black;
-    color: white;
-    border: none;
-    padding: 6px;
-    border-radius: 2px;
-    font-size: 12px;
+    color: black;
     font-weight: bolder;
+    background-color: #fab005;
+    border: 1px solid black;
+    box-shadow: 2px 3px 2px #183153;
+    border-radius: 3px;
+    font-size: 15px;
+    padding: 2px 7px;
 }
 input{
     background-color: gray;
@@ -80,6 +82,5 @@ input{
 nav{
     width: 100%;
     background-color: #ffc12f;
-    /* color: white; */
     color: black;
 }
