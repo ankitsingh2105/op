@@ -75,3 +75,9 @@ input{
     display: flex;
     flex-direction: row;
 }
+nav{
+    width: 100%;
+    background-color: #ffc12f;
+    /* color: white; */
+    color: black;
+}
