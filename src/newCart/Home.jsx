@@ -108,14 +108,12 @@ export default function Home() {
                     (<>
                         <div>
                             <br />
-                            <h1>Welcome <br />
-                                {name}👋</h1>
+                            <h1>Welcome <br /> {name}👋</h1>
                             <img src={newDummy} alt="" />
                             <div>Profile Image</div>
                             <div id="info" ref={infoCenter}></div>
                         </div>
                         <div>
-                            <br />
                             <div>
                                 <input type="file" accept="image/*" onChange={handleImageChanges} />
                             </div>
