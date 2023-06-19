@@ -24,6 +24,7 @@ export default function Navbar() {
       setstate(true)
     }
   });
+  unsubscribe();
   return (
     <>
       <nav>

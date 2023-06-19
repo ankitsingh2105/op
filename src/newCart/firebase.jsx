@@ -1,20 +1,11 @@
 import "./index.css"
-import { useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged , GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, doc , setDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCFVxCioGK8yRArkJOMGsBQOSo95xdwyeA",
-  authDomain: "inbound-ranger-375215.firebaseapp.com",
-  projectId: "inbound-ranger-375215",
-  storageBucket: "inbound-ranger-375215.appspot.com",
-  messagingSenderId: "620360233615",
-  appId: "1:620360233615:web:187bdeee983f8bb0bf36fa"
-};
-
+import firebaseConfig from "./config";
 
 export default function FirebaseForm() {
   const app = initializeApp(firebaseConfig);
@@ -26,11 +17,8 @@ export default function FirebaseForm() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("user email-> ", user.email, " \nuser name-> ", user.displayName);
         setEmail(user.email);
         setName(user.displayName);
-      } else {
-        console.log("user is out ");
       }
     });
 
@@ -44,9 +32,7 @@ export default function FirebaseForm() {
     const provider = new GoogleAuthProvider();
     try {
       const signgoogle = await signInWithPopup(auth, provider)
-      console.log("we are inside the login google -> ", signgoogle.user.uid);
-      console.log("we are inside the login google -> ", signgoogle.user.displayName);
-      createUserCollection(signgoogle.user , signgoogle.user.displayName);
+      createUserCollection(signgoogle.user, signgoogle.user.displayName);
     }
     catch (err) {
       console.error(err);
@@ -57,16 +43,17 @@ export default function FirebaseForm() {
   // * ---------------------- *
 
 
-  const createUserCollection = async (user  , name) => {
+  const createUserCollection = async (user, name) => {
     try {
-      const docRef = doc(db, 'newUsers21' , user.uid);
-      await setDoc(docRef , {
+      const docRef = doc(db, 'newUsers21', user.uid);
+      await setDoc(docRef, {
         uid: user.uid,
         email: user.email,
-        name: name
+        name: name,
+        phone: "",
+        gender: ""
       });
-      console.log('Document written with ID: ', docRef.id);
-    } 
+    }
     catch (e) {
       console.error('Error adding document: ', e);
     }
