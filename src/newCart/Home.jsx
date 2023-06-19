@@ -14,7 +14,7 @@ export default function Home() {
     const [newDummy, setDummy] = useState(dummy);
     const infoCenter = useRef(null);
     const [uploadedImage, setImage] = useState(null);
-    const [loading, setloading] = useState(true);
+    const [loading, setloading] = useState(false);
 
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -23,25 +23,24 @@ export default function Home() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                setloading(false);
+                infoCenter.current.innerHTML = `
+                <br/>
+                <div>Name: ${user.displayName}</div>
+                <br/>
+                <div>Email: ${user.email}</div>
+                <br/>
+                <br/>
+                `;
                 setDummy(user.photoURL);
                 setname(user.displayName);
-                infoCenter.current.innerHTML = `
-                    <br/>
-                    <div>Name: ${user.displayName}</div>
-                    <br/>
-                    <div>Email: ${user.email}</div>
-                    <br/>
-                    <br/>
-                `;
+                console.log("in");
             }
             
             else {
                 console.log('user is out');
-                // setloading(true);
             }
         });
-    }, [auth]);
+    },[auth]);
 
     const handleUploading = async () => {
         if (uploadedImage) {
@@ -65,8 +64,9 @@ export default function Home() {
                 console.log('Error uploading blob or file:', err);
                 toast.error('Photo not updated', { autoClose: 1500 });
             }
-        } else {
-            toast.error("no image selected", { autoClose: 1500 })
+        } 
+        else {
+            toast.error("no image selected", { autoClose: 1500 });
         }
     };
 
