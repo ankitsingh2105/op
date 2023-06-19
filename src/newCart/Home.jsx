@@ -48,6 +48,9 @@ export default function Home() {
         if (uploadedImage) {
             console.log('uploading starts');
             const user = auth.currentUser;
+            if(!user){
+                toast.error('Please login', { autoClose: 1500 });
+            }
             const storageRef = ref(
                 storage,
                 `images/${user.uid + ' - ' + user.email}/${uploadedImage.name}`
@@ -60,8 +63,13 @@ export default function Home() {
                 console.log('url inside the try -> ', url);
 
                 await updateProfile(auth.currentUser, { photoURL: url });
-                toast.success('Image updated', { autoClose: 1500 });
-                window.location.reload();
+                try{
+                    toast.success('Image updated', { autoClose: 1500 });
+                    window.location.reload();
+                }
+                catch(err){
+                    toast.error('Something went wrong', { autoClose: 1500 });
+                }
             } catch (err) {
                 console.log('Error uploading blob or file:', err);
                 toast.error('Photo not updated', { autoClose: 1500 });
