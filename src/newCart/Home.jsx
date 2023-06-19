@@ -8,21 +8,23 @@ import firebaseConfig from './config';
 import dummy from './dummyimageFirebase.png';
 
 const app = initializeApp(firebaseConfig);
-
 export default function Home() {
     const [name, setname] = useState('');
     const [newDummy, setDummy] = useState(dummy);
     const infoCenter = useRef(null);
     const [uploadedImage, setImage] = useState(null);
-    const [loading, setloading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const auth = getAuth(app);
     const db = getFirestore(app);
     const storage = getStorage(app);
 
     useEffect(() => {
+        setLoading(false);
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                setDummy(user.photoURL);
+                setname(user.displayName);
                 infoCenter.current.innerHTML = `
                 <br/>
                 <div>Name: ${user.displayName}</div>
@@ -31,16 +33,24 @@ export default function Home() {
                 <br/>
                 <br/>
                 `;
-                setDummy(user.photoURL);
-                setname(user.displayName);
                 console.log("in");
             }
-            
+
             else {
                 console.log('user is out');
+                setLoading(true);
             }
         });
-    },[auth]);
+        const handleBeforeUnload = () => {
+            setLoading(true);
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
     const handleUploading = async () => {
         if (uploadedImage) {
@@ -59,12 +69,13 @@ export default function Home() {
 
                 await updateProfile(auth.currentUser, { photoURL: url });
                 toast.success('photo updated', { autoClose: 1500 });
+                setLoading(true);
                 window.location.reload();
             } catch (err) {
                 console.log('Error uploading blob or file:', err);
                 toast.error('Photo not updated', { autoClose: 1500 });
             }
-        } 
+        }
         else {
             toast.error("no image selected", { autoClose: 1500 });
         }
@@ -87,10 +98,11 @@ export default function Home() {
         <>
             {
                 loading ?
-                    (<h1>....loading</h1>) :
+                    (<h1 id="spinner"></h1>) :
                     (<>
                         <div>
-                            <h1>Welcome</h1>
+                            <h1>Welcome <br />
+                            {name}👋</h1>
                             <div id="info" ref={infoCenter}></div>
                         </div>
                         <div>
