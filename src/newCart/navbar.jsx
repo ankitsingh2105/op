@@ -12,7 +12,7 @@ export default function Navbar() {
   const auth = getAuth(app);
   const handleLogout = async (e) => {
     await signOut(auth);
-    toast.success("Sign out is successfull", { autoClose: 1500 });
+    toast.success("Signed Out", { autoClose: 1500 });
     setTimeout(() => {
       window.location.reload();
     }, 1800);

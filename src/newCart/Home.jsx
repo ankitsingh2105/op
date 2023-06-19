@@ -23,19 +23,19 @@ export default function Home() {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setDummy(user.photoURL);
-                setLoading(false);
                 setname(user.displayName);
+                setLoading(false);
                 infoCenter.current.innerHTML = `
                 <br/>
-                <div>Name: ${user.displayName}</div>
+                <div class="info"><b>Name:</b> &nbsp; ${user.displayName}</div>
                 <br/>
-                <div>Email: ${user.email}</div>
+                <div class="info"><b>Email:</b> &nbsp; ${user.email}</div>
                 <br/>
                 <br/>
                 `;
                 console.log("in");
             }
-            
+
             else {
                 console.log('user is out');
             }
@@ -60,7 +60,7 @@ export default function Home() {
                 console.log('url inside the try -> ', url);
 
                 await updateProfile(auth.currentUser, { photoURL: url });
-                toast.success('photo updated', { autoClose: 1500 });
+                toast.success('Image updated', { autoClose: 1500 });
                 window.location.reload();
             } catch (err) {
                 console.log('Error uploading blob or file:', err);
@@ -68,7 +68,7 @@ export default function Home() {
             }
         }
         else {
-            toast.error("no image selected", { autoClose: 1500 });
+            toast.error("No image selected", { autoClose: 1500 });
         }
     };
 
@@ -86,7 +86,7 @@ export default function Home() {
     };
 
     useEffect((e) => {
-        console.log("shit-> ", loading);
+        // console.log("shit-> ", loading);
     }, [loading]);
 
     return (
@@ -98,18 +98,18 @@ export default function Home() {
                         <div>
                             <h1>Welcome <br />
                                 {name}👋</h1>
+                            <img src={newDummy} alt="" />
+                            <div>Profile Image</div>
                             <div id="info" ref={infoCenter}></div>
                         </div>
                         <div>
-                            <img src={newDummy} alt="" />
                             <br />
-                            <div>Profile Image</div>
-                            <br />
-                            <input type="file" accept="image/*" onChange={handleImageChanges} />
+                            <div>
+                                <input type="file" accept="image/*" onChange={handleImageChanges} />
+                            </div>
                             <br />
                             <button onClick={handleUploading}>Upload New Image</button>
                         </div>
-                        <br />
                         <br />
                         <div>
                             <button onClick={getUserInfo}>Get User Info <small>(not for you)</small> </button>
