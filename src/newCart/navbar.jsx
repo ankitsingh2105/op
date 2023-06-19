@@ -29,12 +29,12 @@ export default function Navbar() {
       <nav>
         <ToastContainer />
         <ul>
-          <Link to="/" ><li>Home</li></Link>
+          <Link to="/" style={{ color: 'black', textDecoration: 'none' }} ><li>Home</li></Link>
           {
             state ?
-              (<Link to="/login" ><li>Sign In</li></Link>)
+              (<Link to="/login" style={{ color: 'black', textDecoration: 'none' }}><li>Sign In</li></Link>)
               :
-              (<li onClick={handleLogout} >Logout</li>)
+              (<li style={{ color: 'black', textDecoration: 'none' }} onClick={handleLogout} >Logout</li>)
           }
         </ul>
       </nav>
