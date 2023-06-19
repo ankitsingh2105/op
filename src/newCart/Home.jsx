@@ -20,10 +20,10 @@ export default function Home() {
     const storage = getStorage(app);
 
     useEffect(() => {
-        setLoading(false);
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setDummy(user.photoURL);
+                setLoading(false);
                 setname(user.displayName);
                 infoCenter.current.innerHTML = `
                 <br/>
@@ -35,22 +35,14 @@ export default function Home() {
                 `;
                 console.log("in");
             }
-
+            
             else {
                 console.log('user is out');
-                setLoading(true);
             }
+            setLoading(false);
         });
-        const handleBeforeUnload = () => {
-            setLoading(true);
-        };
+    }, [loading]);
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
 
     const handleUploading = async () => {
         if (uploadedImage) {
@@ -69,7 +61,6 @@ export default function Home() {
 
                 await updateProfile(auth.currentUser, { photoURL: url });
                 toast.success('photo updated', { autoClose: 1500 });
-                setLoading(true);
                 window.location.reload();
             } catch (err) {
                 console.log('Error uploading blob or file:', err);
@@ -94,6 +85,10 @@ export default function Home() {
         }
     };
 
+    useEffect((e) => {
+        console.log("shit-> ", loading);
+    }, [loading]);
+
     return (
         <>
             {
@@ -102,7 +97,7 @@ export default function Home() {
                     (<>
                         <div>
                             <h1>Welcome <br />
-                            {name}👋</h1>
+                                {name}👋</h1>
                             <div id="info" ref={infoCenter}></div>
                         </div>
                         <div>
@@ -117,7 +112,7 @@ export default function Home() {
                         <br />
                         <br />
                         <div>
-                            <button onClick={getUserInfo}>Get User Info</button>
+                            <button onClick={getUserInfo}>Get User Info <small>(not for you)</small> </button>
                         </div>
                     </>
                     )

@@ -17,14 +17,13 @@ export default function Navbar() {
       window.location.reload();
     }, 1800);
   }
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
+   onAuthStateChanged(auth, (user) => {
     if (user) {
       setstate(false)
     } else {
       setstate(true)
     }
   });
-  unsubscribe();
   return (
     <>
       <nav>
