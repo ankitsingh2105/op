@@ -44,6 +44,7 @@ export default function FirebaseForm() {
 
 
   const createUserCollection = async (user, name) => {
+    console.log
     try {
       const docRef = doc(db, 'newUsers21', user.uid);
       await setDoc(docRef, {

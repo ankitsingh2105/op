@@ -16,28 +16,31 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
 
     const auth = getAuth(app);
-    const db = getFirestore(app);
     const storage = getStorage(app);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
+
+                const areYaar = parseInt(user.reloadUserInfo.lastLoginAt)
+                const lastLoginDate = new Date(areYaar);
+                const formattedLastLogin = lastLoginDate.toDateString();
+
                 setDummy(user.photoURL);
                 setname(user.displayName);
                 setLoading(false);
+
                 infoCenter.current.innerHTML = `
                 <br/>
                 <div class="info"><b>Name:</b> &nbsp; ${user.displayName}</div>
                 <br/>
                 <div class="info"><b>Email:</b> &nbsp; ${user.email}</div>
                 <br/>
+                <div class="info"><b>Last Login:</b> &nbsp; ${formattedLastLogin}</div>
+                <br/>
+                <br/>
                 <br/>
                 `;
-                console.log("in");
-            }
-
-            else {
-                console.log('user is out');
             }
             setLoading(false);
         });
@@ -48,7 +51,7 @@ export default function Home() {
         if (uploadedImage) {
             console.log('uploading starts');
             const user = auth.currentUser;
-            if(!user){
+            if (!user) {
                 toast.error('Please login', { autoClose: 1500 });
             }
             const storageRef = ref(
@@ -63,11 +66,11 @@ export default function Home() {
                 console.log('url inside the try -> ', url);
 
                 await updateProfile(auth.currentUser, { photoURL: url });
-                try{
+                try {
                     toast.success('Image updated', { autoClose: 1500 });
                     window.location.reload();
                 }
-                catch(err){
+                catch (err) {
                     toast.error('Something went wrong', { autoClose: 1500 });
                 }
             } catch (err) {
