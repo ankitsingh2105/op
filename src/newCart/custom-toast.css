@@ -1,0 +1,14 @@
+.custom-toast {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+    width: 100%;
+  }
+
+.custom-toast ul, .custom-toast input, .custom-toast div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: row;
+  }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "./index.css"
+import "./custom-toast.css"
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { initializeApp } from 'firebase/app';
 import { signOut } from 'firebase/auth';
@@ -27,7 +28,7 @@ export default function Navbar() {
   return (
     <>
       <nav>
-        <ToastContainer />
+        <ToastContainer position="bottom-left" toastClassName="custom-toast"  />
         <ul>
           <Link to="/" style={{ color: 'black' }} ><li>Home</li></Link>
           {
