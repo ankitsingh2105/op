@@ -10,94 +10,106 @@ import dummy from './dummyimageFirebase.png';
 const app = initializeApp(firebaseConfig);
 
 export default function Home() {
-  const [name, setname] = useState('');
-  const [newDummy, setDummy] = useState(dummy);
-  const infoCenter = useRef(null);
-  const [uploadedImage, setImage] = useState(null);
+    const [name, setname] = useState('');
+    const [newDummy, setDummy] = useState(dummy);
+    const infoCenter = useRef(null);
+    const [uploadedImage, setImage] = useState(null);
+    const [loading, setloading] = useState(true);
 
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setDummy(user.photoURL);
-        setname(user.displayName);
-        infoCenter.current.innerHTML = `
-          <br/>
-          <div>Name: ${user.displayName}</div>
-          <br/>
-          <div>Email: ${user.email}</div>
-          <br/>
-          <br/>
-        `;
-      } else {
-        console.log('user is out');
-      }
-    });
-  }, [auth]);
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setloading(false);
+                setDummy(user.photoURL);
+                setname(user.displayName);
+                infoCenter.current.innerHTML = `
+                    <br/>
+                    <div>Name: ${user.displayName}</div>
+                    <br/>
+                    <div>Email: ${user.email}</div>
+                    <br/>
+                    <br/>
+                `;
+            }
+            
+            else {
+                console.log('user is out');
+                // setloading(true);
+            }
+        });
+    }, [auth]);
 
-  const handleUploading = async () => {
-    if (uploadedImage) {
-      console.log('uploading starts');
-      const user = auth.currentUser;
-      const storageRef = ref(
-        storage,
-        `images/${user.uid + ' - ' + user.email}/${uploadedImage.name}`
-      );
+    const handleUploading = async () => {
+        if (uploadedImage) {
+            console.log('uploading starts');
+            const user = auth.currentUser;
+            const storageRef = ref(
+                storage,
+                `images/${user.uid + ' - ' + user.email}/${uploadedImage.name}`
+            );
 
-      try {
-        await uploadBytes(storageRef, uploadedImage);
-        console.log('image uploaded to server');
-        const url = await getDownloadURL(storageRef);
-        console.log('url inside the try -> ', url);
+            try {
+                await uploadBytes(storageRef, uploadedImage);
+                console.log('image uploaded to server');
+                const url = await getDownloadURL(storageRef);
+                console.log('url inside the try -> ', url);
 
-        await updateProfile(auth.currentUser, { photoURL: url });
-        toast.success('photo updated', { autoClose: 1500 });
-        window.location.reload();
-      } catch (err) {
-        console.log('Error uploading blob or file:', err);
-        toast.error('Photo not updated', { autoClose: 1500 });
-      }
-    } else {
-      toast.error("no image selected" ,{autoClose:1500})
-    }
-  };
+                await updateProfile(auth.currentUser, { photoURL: url });
+                toast.success('photo updated', { autoClose: 1500 });
+                window.location.reload();
+            } catch (err) {
+                console.log('Error uploading blob or file:', err);
+                toast.error('Photo not updated', { autoClose: 1500 });
+            }
+        } else {
+            toast.error("no image selected", { autoClose: 1500 })
+        }
+    };
 
-  const handleImageChanges = (e) => {
-    const photo = e.target.files[0];
-    setImage(photo);
-    console.log('Selected image:', photo);
-  };
+    const handleImageChanges = (e) => {
+        const photo = e.target.files[0];
+        setImage(photo);
+        console.log('Selected image:', photo);
+    };
 
-  const getUserInfo = () => {
-    const user = auth.currentUser;
-    if (user) {
-      console.log('Current user:', user);
-    }
-  };
+    const getUserInfo = () => {
+        const user = auth.currentUser;
+        if (user) {
+            console.log('Current user:', user);
+        }
+    };
 
-  return (
-    <>
-      <div>
-        <h1>Welcome</h1>
-        <div id="info" ref={infoCenter}></div>
-      </div>
-      <div>
-        <img src={newDummy} alt="" />
-        <br />
-        <div>Profile Image</div>
-        <br />
-        <input type="file" accept="image/*" onChange={handleImageChanges} />
-        <br />
-        <button onClick={handleUploading}>Upload New Image</button>
-      </div>
-      <br />
-      <br />
-      <div>
-        <button onClick={getUserInfo}>Get User Info</button>
-      </div>
-    </>
-  );
+    return (
+        <>
+            {
+                loading ?
+                    (<h1>....loading</h1>) :
+                    (<>
+                        <div>
+                            <h1>Welcome</h1>
+                            <div id="info" ref={infoCenter}></div>
+                        </div>
+                        <div>
+                            <img src={newDummy} alt="" />
+                            <br />
+                            <div>Profile Image</div>
+                            <br />
+                            <input type="file" accept="image/*" onChange={handleImageChanges} />
+                            <br />
+                            <button onClick={handleUploading}>Upload New Image</button>
+                        </div>
+                        <br />
+                        <br />
+                        <div>
+                            <button onClick={getUserInfo}>Get User Info</button>
+                        </div>
+                    </>
+                    )
+            }
+        </>
+    );
 }
