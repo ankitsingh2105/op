@@ -20,34 +20,28 @@ export default function FirebaseForm() {
   
   
   const createUserCollection = async (user, name) => {
-    try {
+      console.log("inside the collection ->  " , user)
       const docRef = doc(db, 'newUser', user.uid);
       await setDoc(docRef, {
         uid: user.uid,
         email: user.email,
         name: name,
       });
-    }
-    catch (e) {
-      toast.error("something went wrong"  ,  {aut})
-    }
   };
 
   useEffect(() => {
-    setLoading(false);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         createUserCollection(user , user.displayName);
         console.log("op -> " , user.uid , user.displayName);
         setEmail(user.email);
         setName(user.displayName);
-        console.log("this is user -> ", user.uid);
-        console.log("this is user name-> ", user.displayName);
       }
     });
-
+    
+    setLoading(false);
     return () => unsubscribe();
-  }, [auth, userEmail , userName]);
+  }, [auth, userEmail]);
 
 
   // TODO : google sign ups
