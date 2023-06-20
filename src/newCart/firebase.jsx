@@ -102,11 +102,11 @@ export default function FirebaseForm() {
         <form onSubmit={handleFormSubmit} action="">
           <div>
             <div>
-              <div>Email</div>
+              <div><b>Email</b></div>
               <input placeholder="Email" name="email" type="email" />
             </div>
             <div>
-              <div>Password</div>
+              <div><b>Password</b></div>
               <input placeholder="Password" name="passwords" type="password" />
             </div>
             <div>
@@ -114,12 +114,12 @@ export default function FirebaseForm() {
               <div className="Names">
 
                 <div>
-                  <div>First Name</div>
+                  <div><b>First Name</b></div>
                   <input placeholder="First Name" type="text" name="firstName" />
                 </div>
 
                 <div>
-                  <div>Last Name</div>
+                  <div><b>Last Name</b></div>
                   <input placeholder="Last name" type="text" name="lastname" />
                 </div>
               </div>

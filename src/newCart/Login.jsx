@@ -28,11 +28,11 @@ export default function Login() {
                 <form onSubmit={handleLogin} action="">
                     <div>
                         <div>
-                            <div>Email</div>
+                            <div><b>Email</b></div>
                             <input placeholder="Email" name="email" type="email" />
                         </div>
                         <div>
-                            <div>Password</div>
+                            <div><b>Password</b></div>
                             <input placeholder="Password" name="password" type="password" />
                         </div>
                         <br />
