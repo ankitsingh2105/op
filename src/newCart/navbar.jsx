@@ -7,6 +7,7 @@ import { signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom'
 import firebaseConfig from "./config"
 import { ToastContainer, toast } from 'react-toastify';
+
 export default function Navbar() {
   const [state, setstate] = useState(false)
   const app = initializeApp(firebaseConfig);
@@ -33,7 +34,15 @@ export default function Navbar() {
           <Link to="/" style={{ color: 'black' }} ><li>Home</li></Link>
           {
             state ?
-              (<Link to="/login" style={{ color: 'black'}}><li>Sign In</li></Link>)
+              (
+              <>
+
+              <Link to="/signin" style={{ color: 'black'}}><li>Sign Up</li></Link>
+              
+              <Link to="/login" style={{ color: 'black'}}><li>Log In</li></Link>
+
+              </>
+              )
               :
               (<li style={{ color: 'black' }} onClick={handleLogout} >Logout</li>)
           }

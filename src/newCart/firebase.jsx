@@ -1,7 +1,7 @@
 import "./index.css"
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
-import { updateProfile, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { updateProfile, signInWithEmailAndPassword , createUserWithEmailAndPassword, getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import {getFirestore, doc, setDoc } from 'firebase/firestore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,21 +19,13 @@ export default function FirebaseForm() {
   // * ---------------------- *
   
   
-  const createUserCollection = async (user, name) => {
-      console.log("inside the collection ->  " , user)
-      const docRef = doc(db, 'newUser', user.uid);
-      await setDoc(docRef, {
-        uid: user.uid,
-        email: user.email,
-        name: name,
-      });
-  };
-
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         createUserCollection(user , user.displayName);
         console.log("op -> " , user.uid , user.displayName);
+        setLoading(false);
         setEmail(user.email);
         setName(user.displayName);
       }
@@ -43,9 +35,17 @@ export default function FirebaseForm() {
     return () => unsubscribe();
   }, [auth, userEmail]);
 
-
+  
+  const createUserCollection = async (user, name) => {
+      const docRef = doc(db, 'newUser', user.uid);
+      await setDoc(docRef, {
+        uid: user.uid,
+        email: user.email,
+        name: name,
+      });
+  };
   // TODO : google sign ups
-
+  
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -67,17 +67,18 @@ export default function FirebaseForm() {
     const lname = e.target.lastname.value;
     const email = e.target.email.value;
     const password = e.target.passwords.value;
-    const emailAndPass = await createUserWithEmailAndPassword(auth, email, password)
     try {
+      await createUserWithEmailAndPassword(auth, email, password);
       window.location.reload();
       console.log("this is emailandpass-> ", emailAndPass);
       toast.success("this is success", { autoClose: 1500 });
-      await updateProfile(auth.currentUser, { displayName: `${fname} ${lname}`, photoURL : dummy });
+      await updateProfile(auth.currentUser, { displayName: `${fname} ${lname}`, photoURL: dummy });
+    } catch (err) {
+      console.log("0-0-0");
+      toast.error("An error occurred", { autoClose: 1500 });
     }
-    catch (err) {
-      toast.error(emailAndPass.error, { autoClose: 1500 });
-    }
-  }
+  };
+  
 
 
   return (
