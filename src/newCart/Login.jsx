@@ -15,10 +15,12 @@ export default function Login() {
             toast.success("Login successful", { autoClose: 1500 });
             e.target.email.value = "";
             e.target.password.value = "";
+            window.location.href = "/";
         } catch (error) {
             toast.error("Invalid Credentials", { autoClose: 1500 });
         }
     }
+
 
     return (
         <>
@@ -36,7 +38,7 @@ export default function Login() {
                             <input placeholder="Password" name="password" type="password" />
                         </div>
                         <br />
-                        <button >Login</button>
+                        <button>Login</button>
                         <br />
                     </div>
                 </form>

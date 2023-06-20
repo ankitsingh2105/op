@@ -11,8 +11,8 @@ export default function FirebaseForm() {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const [userName, setName] = useState("Please login");
-  const [userEmail, setEmail] = useState("Please login");
+  const [userName, setName] = useState("Please singin/singup");
+  const [userEmail, setEmail] = useState("Please singin/singup");
   const [loading, setLoading] = useState(true);
 
   // todo : creating user collection -> 
@@ -53,6 +53,7 @@ export default function FirebaseForm() {
       const signgoogle = await signInWithPopup(auth, provider)
       createUserCollection(signgoogle.user, signgoogle.user.displayName);
       toast.success("Google Authentication Successful", { autoClose: 1500 });
+      window.location.href = "/";
     }
     catch (err) {
       toast.error("Somethign went wrong", { autoClose: 1500 });
@@ -68,9 +69,9 @@ export default function FirebaseForm() {
     const password = e.target.passwords.value;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      window.location.reload();
       toast.success("this is success", { autoClose: 1500 });
       await updateProfile(auth.currentUser, { displayName: `${fname} ${lname}`, photoURL: dummy });
+      window.location.href = "/";
     } catch (err) {
       toast.error("An error occurred", { autoClose: 1500 });
     }
