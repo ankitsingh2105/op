@@ -7,7 +7,7 @@ import { signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom'
 import firebaseConfig from "./config"
 import { ToastContainer, toast } from 'react-toastify';
-import Logo from "./Logo.png"
+import Logo from "./logo.png"
 
 export default function Navbar() {
   const [state, setstate] = useState(false)
