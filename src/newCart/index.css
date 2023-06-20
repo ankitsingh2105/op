@@ -13,9 +13,9 @@ li{
 ul{
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: row;
     padding: 0px;
+    margin-left: 20px;
 }
 div , input{
     display: flex;
@@ -69,6 +69,7 @@ img{
 nav{
     font-size: 18px;
     font-weight: bolder;
+    padding: 0px;
 }
 button{
     color: black;
@@ -109,4 +110,9 @@ article{
 }
 form div{
     margin: 4px 0px;
+}
+#logoImg{
+    height: 50px;
+    width: 50px;
+    border: 2px solid black;
 }

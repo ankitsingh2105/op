@@ -9,13 +9,12 @@ export default function Login() {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log("logging in");
         const auth = getAuth();
         try {
             await signInWithEmailAndPassword(auth, email, password);
             toast.success("Login successful", { autoClose: 1500 });
-            e.target.email.value="";
-            e.target.password.value="";
+            e.target.email.value = "";
+            e.target.password.value = "";
         } catch (error) {
             toast.error("Invalid Credentials", { autoClose: 1500 });
         }

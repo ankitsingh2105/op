@@ -7,6 +7,7 @@ import { signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom'
 import firebaseConfig from "./config"
 import { ToastContainer, toast } from 'react-toastify';
+import Logo from "./Logo.png"
 
 export default function Navbar() {
   const [state, setstate] = useState(false)
@@ -31,6 +32,7 @@ export default function Navbar() {
       <nav>
         <ToastContainer position="bottom-left" toastClassName="custom-toast"  />
         <ul>
+          <img id="logoImg" src={Logo} alt="" />
           <Link to="/" style={{ color: 'black' }} ><li>Home</li></Link>
           {
             state ?

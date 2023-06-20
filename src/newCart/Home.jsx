@@ -48,7 +48,6 @@ export default function Home() {
 
     const handleUploading = async () => {
         if (uploadedImage) {
-            console.log('uploading starts');
             const user = auth.currentUser;
             if (!user) {
                 toast.error('Please login', { autoClose: 1500 });
@@ -60,9 +59,7 @@ export default function Home() {
 
             try {
                 await uploadBytes(storageRef, uploadedImage);
-                console.log('image uploaded to server');
                 const url = await getDownloadURL(storageRef);
-                console.log('url inside the try -> ', url);
 
                 await updateProfile(auth.currentUser, { photoURL: url });
                 try {
@@ -73,7 +70,6 @@ export default function Home() {
                     toast.error('Something went wrong', { autoClose: 1500 });
                 }
             } catch (err) {
-                console.log('Error uploading blob or file:', err);
                 toast.error('Photo not updated', { autoClose: 1500 });
             }
         }
@@ -91,13 +87,9 @@ export default function Home() {
     const getUserInfo = () => {
         const user = auth.currentUser;
         if (user) {
-            console.log('Current user:', user);
+            // console.log('Current user:', user);
         }
     };
-
-    useEffect((e) => {
-        // console.log("shit-> ", loading);
-    }, [loading]);
 
     return (
         <>
