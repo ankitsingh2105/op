@@ -39,9 +39,9 @@ export default function Navbar() {
               (
               <>
 
-              <Link className='link' to="/signin" style={{ color: 'black'}}><li>Sign Up</li></Link>
+              <Link className='link' to="/signin" style={{ color: 'black'}}><li>SignUp</li></Link>
               
-              <Link className='link' to="/login" style={{ color: 'black'}}><li>Log In</li></Link>
+              <Link className='link' to="/login" style={{ color: 'black'}}><li>LogIn</li></Link>
 
               </>
               )
