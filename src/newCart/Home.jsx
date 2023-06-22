@@ -41,7 +41,6 @@ export default function Home() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-
                 console.log("this is the user-> ", user);
                 console.log("op anku -> ", user.arrayOfObject);
 
@@ -53,7 +52,7 @@ export default function Home() {
                 setname(user.displayName);
                 setLoading(false);
 
-                getCollection();
+                // getCollection();
 
                 infoCenter.current.innerHTML = `
                 <br/>

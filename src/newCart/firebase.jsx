@@ -76,8 +76,6 @@ export default function FirebaseForm() {
     }
   };
 
-
-
   return (
     <>
       <h1>स्वागत है!</h1>
