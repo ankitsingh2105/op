@@ -11,8 +11,8 @@ export default function FirebaseForm() {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const [userName, setName] = useState("Please singin/singup");
-  const [userEmail, setEmail] = useState("Please singin/singup");
+  const [userName, setName] = useState("Please Sign In/ Sign Up");
+  const [userEmail, setEmail] = useState("Please Sign In/ Sign Up");
   const [loading, setLoading] = useState(true);
 
   // todo : creating user collection -> 
@@ -22,7 +22,6 @@ export default function FirebaseForm() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         createUserCollection(user, user.displayName);
-        console.log("op -> ", user.uid, user.displayName);
         setLoading(false);
         setEmail(user.email);
         setName(user.displayName);
@@ -94,7 +93,7 @@ export default function FirebaseForm() {
       <article>
         <br />
         <div>
-          <button onClick={handleGoogleLogin}>Sign In with google</button>
+          <button onClick={handleGoogleLogin}>Sign Up with google</button>
         </div>
         <br />
         <div style={{ fontWeight: "bolder" }} >OR</div>

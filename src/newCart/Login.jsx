@@ -1,15 +1,15 @@
 import React from 'react'
 import "./index.css"
 import "./custom-toast.css"
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { toast } from 'react-toastify';
 export default function Login() {
+    const auth = getAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        const auth = getAuth();
         try {
             await signInWithEmailAndPassword(auth, email, password);
             toast.success("Login successful", { autoClose: 1500 });
@@ -20,6 +20,28 @@ export default function Login() {
             toast.error("Invalid Credentials", { autoClose: 1500 });
         }
     }
+
+    const createUserCollection = async (user) => {
+        const docRef = doc(db, 'newUser', user.uid);
+        await setDoc(docRef, {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName,
+        });
+      };
+
+    const handleGoogleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+        const signgoogle = await signInWithPopup(auth, provider)
+          createUserCollection(signgoogle.user);
+          toast.success("Google Authentication Successful", { autoClose: 1500 });
+          window.location.href = "/";
+        }
+        catch (err) {
+          toast.error("Somethign went wrong", { autoClose: 1500 });
+        }
+      }
 
 
     return (
@@ -42,6 +64,14 @@ export default function Login() {
                         <br />
                     </div>
                 </form>
+            </article>
+            <br />
+            <h3>OR</h3>
+            <br />
+            <article>
+                <div style={{padding : "1rem 0rem"}} >
+                <button onClick={handleGoogleLogin}>Login with google</button>
+                </div>
             </article>
         </>
     )

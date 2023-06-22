@@ -33,21 +33,22 @@ export default function Navbar() {
         <ToastContainer position="bottom-left" toastClassName="custom-toast"  />
         <ul>
           <img id="logoImg" src={Logo} alt="" />
-          <Link to="/" style={{ color: 'black' }} ><li>Home</li></Link>
+          <Link  className='link' to="/" style={{ color: 'black' }} ><li>Home</li></Link>
           {
             state ?
               (
               <>
 
-              <Link to="/signin" style={{ color: 'black'}}><li>Sign Up</li></Link>
+              <Link className='link' to="/signin" style={{ color: 'black'}}><li>Sign Up</li></Link>
               
-              <Link to="/login" style={{ color: 'black'}}><li>Log In</li></Link>
+              <Link className='link' to="/login" style={{ color: 'black'}}><li>Log In</li></Link>
 
               </>
               )
               :
               (<li style={{ color: 'black' }} onClick={handleLogout} >Logout</li>)
           }
+        <li> <a href="https://ankitsinghchauhan.tech/">Portfolio</a></li>
         </ul>
       </nav>
     </>

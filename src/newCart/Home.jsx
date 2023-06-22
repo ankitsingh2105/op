@@ -2,26 +2,48 @@ import React, { useRef, useState, useEffect } from 'react';
 import { onAuthStateChanged, getAuth, updateProfile } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import firebaseConfig from './config';
 import dummy from './dummyimageFirebase.png';
+import 'react-image-crop/dist/ReactCrop.css';
 
 const app = initializeApp(firebaseConfig);
 export default function Home() {
+
+    const db = getFirestore(app);
+
     const [name, setname] = useState('');
     const [newDummy, setDummy] = useState(dummy);
     const infoCenter = useRef(null);
+    const arrayStore = useRef(null);
     const [uploadedImage, setImage] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const auth = getAuth(app);
     const storage = getStorage(app);
 
-    console.log("welcome inspector 👋")
+    const obj = [
+        {
+            name: "Ankit Singh Chauhan",
+            class: "12th"
+        },
+        {
+            name: "Manish Singh Chauhan",
+            class: "11th",
+        },
+        {
+            name: "Nitin Chauhan",
+            class: "13th"
+        }
+    ]
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
+
+                console.log("this is the user-> ", user);
+                console.log("op anku -> ", user.arrayOfObject);
 
                 const areYaar = parseInt(user.reloadUserInfo.lastLoginAt)
                 const lastLoginDate = new Date(areYaar);
@@ -30,6 +52,8 @@ export default function Home() {
                 setDummy(user.photoURL);
                 setname(user.displayName);
                 setLoading(false);
+
+                getCollection();
 
                 infoCenter.current.innerHTML = `
                 <br/>
@@ -81,15 +105,53 @@ export default function Home() {
     const handleImageChanges = (e) => {
         const photo = e.target.files[0];
         setImage(photo);
-        console.log('Selected image:', photo);
     };
 
-    const getUserInfo = () => {
-        const user = auth.currentUser;
-        if (user) {
-            // console.log('Current user:', user);
-        }
+    const createUserCollection = async (user, name) => {
+        const docRef = doc(db, 'objUser', user.uid);
+        await setDoc(docRef, {
+            uid: user.uid,
+            email: user.email,
+            name: name,
+            arrayOfObject: obj
+        });
     };
+
+
+    // todo :i this is the second thing
+
+    // const getCollection = async () => {
+    //     const user = auth.currentUser;
+    //     const docRef = doc(db, "objUser", user.uid);
+    //     const docSnap = await getDoc(docRef);
+    //     if(user){
+    //         let objArray =  docSnap.data().arrayOfObject;
+    //         let tempHTML = ""
+    //         objArray.forEach((e) => {
+    //             tempHTML+=
+    //                 `
+    //             <div className="info"><b>Name : ${e.name} </b></div>
+    //             <div className="info"><b>Class : ${e.class} </b></div>
+    //             `
+    //         })
+    //         arrayStore.current.innerHTML = tempHTML
+    //     }
+    //     else{
+    //         toast.error("Please login first-> " , {autoClose:1500})
+    //     }
+    // }
+
+    // todo : adding shit
+
+    const handleAdding = async () => {
+        console.log("trying to add data right now");
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                createUserCollection(user, user.displayName);
+                toast.success("creadted", { autoClose: 1500 });
+            }
+        });
+    }
 
     return (
         <>
@@ -113,9 +175,6 @@ export default function Home() {
                             <button onClick={handleUploading}>Upload New Image</button>
                         </div>
                         <br />
-                        <div>
-                            <button onClick={getUserInfo}>Get User Info <small>(not for you)</small> </button>
-                        </div>
                     </>
                     )
             }
